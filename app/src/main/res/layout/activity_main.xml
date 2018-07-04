@@ -42,6 +42,7 @@
             android:textColor="@color/white"
             />
 
+
         <EditText
             android:id="@+id/etTest"
             android:layout_width="match_parent"
