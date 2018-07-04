@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "90509381086",
+    "firebase_url": "https://clico-realese.firebaseio.com",
+    "project_id": "clico-realese",
+    "storage_bucket": "clico-realese.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90509381086:android:9d2bd9d3c16534bb",
+        "android_client_info": {
+          "package_name": "com.sunny.putra.clipco"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90509381086-7nhq811gvucao86maa14qgu8fllul5ai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sunny.putra.clipco",
+            "certificate_hash": "0e9fcfcd9c6c9c410b896e4beccb25bce633012c"
+          }
+        },
+        {
+          "client_id": "90509381086-701q19s312caa3lmb0s0f17802gbkubb.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "90509381086-701q19s312caa3lmb0s0f17802gbkubb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc86v-hd4r0TUDwrM59uz9MNiV0KobVEM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90509381086-701q19s312caa3lmb0s0f17802gbkubb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

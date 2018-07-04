@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">ClipCo</string>
+    <string name="haloo">haloo</string>
+    <string name="delete">DELETE</string>
+    <string name="save">save</string>
+    <string name="save_setting">auto save</string>
+    <string name="lihat_clip">MY COLLECTION</string>
+    <string name="date">date</string>
+    <string name="my_collection">My Collection</string>
+    <string name="copied_clip">copied clip</string>
+    <string name="copy">COPY</string>
+    <string name="PositiveButton">YES</string>
+    <string name="NegativeButton">NO</string>
+    <string name="delete_all">Are you sure want to delete all your collection ?</string>
+    <string name="alert">ALERT !</string>
+    <string name="update">UPDATE</string>
+    <string name="close">CLOSE</string>
+    <string name="share">SHARE</string>
+    <string name="share_using">share using</string>
+    <string name="hint_ma">Copied Text here</string>
+    <string name="scan">SCAN QR CODE</string>
+    <string name="convert_to_qr">CONVERT</string>
+    <string name="alert_delete">are you sure want delete this collection ?</string>
+    <string name="get_your_qr_code_here">get your QR CODE here</string>
+    <string name="mode_save">MODE</string>
+    <string name="delete_all_collection">Delete all collection</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>

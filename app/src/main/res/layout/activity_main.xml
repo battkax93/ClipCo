@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightBlue"
+    android:orientation="vertical"
+    tools:context="com.sunny.putra.clipco.MainActivity">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|left"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:text="@string/date"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/etTest"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_edittext"
+            android:hint="@string/hint_ma"
+            android:padding="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+
+            <Button
+                android:id="@+id/btnTest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:text="@string/haloo"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnCopy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_copy_black"
+                android:padding="10dp"
+                android:text="@string/copy"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_save_black"
+                android:padding="10dp"
+                android:text="@string/save"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_update_black"
+                android:padding="10dp"
+                android:text="@string/update"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_trash"
+                android:padding="10dp"
+                android:text="@string/delete"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnListClip"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_list_black"
+                android:padding="10dp"
+                android:text="@string/lihat_clip"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnDel2"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_margin="5dp"
+                android:layout_weight="100"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_trash"
+                android:padding="10dp"
+                android:text="@string/delete"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <Button
+                android:id="@+id/btnScanToQR"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_qrcodescanner"
+                android:padding="10dp"
+                android:text="@string/scan"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnConvertToQR"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_convert_qr"
+                android:padding="10dp"
+                android:text="@string/convert_to_qr"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnConvertToQR2"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_margin="5dp"
+                android:layout_weight="100"
+                android:background="@drawable/bg_main_button"
+                android:drawableLeft="@drawable/ic_convert_qr"
+                android:padding="10dp"
+                android:text="@string/convert_to_qr"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnShare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_main_button"
+                android:drawableStart="@drawable/ic_share_black"
+                android:padding="10dp"
+                android:text="@string/share"
+                android:textStyle="bold" />
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/btnShare"
+                android:visibility="gone"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/UNIT_ID_lIST_FOOTER" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
