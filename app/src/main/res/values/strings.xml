@@ -27,6 +27,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="manual_mode">Manual Mode</string>
+    <string name="auto_save_mode">Auto Save Mode</string>
+    <string name="clipco">ClipCo</string>
 
 
 </resources>

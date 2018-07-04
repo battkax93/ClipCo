@@ -2,16 +2,21 @@ package com.sunny.putra.clipco;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -34,6 +39,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.sunny.putra.clipco.Notification.KillNotificationsService;
+import com.sunny.putra.clipco.Notification.NotificationHelper;
 import com.sunny.putra.clipco.controler.MainControlerActivity;
 import com.sunny.putra.clipco.receiver.NetworkStateChangeReceiver;
 import com.sunny.putra.clipco.util.Globals;
@@ -52,6 +59,10 @@ public class MainActivity extends MainControlerActivity {
     android.support.v7.widget.Toolbar toolbar;
     TextView tbTittle;
     SwitchCompat switchAB;
+
+    public String KeyToggle = "isChecked";
+
+    private NotificationHelper notificationHelper;
 
     private int maxCount = 4;
     private String KEY_COUNT = "aCount";
@@ -93,6 +104,10 @@ public class MainActivity extends MainControlerActivity {
 
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            notificationHelper = new NotificationHelper(this);
+        }
 
         tgl_notif = setDate();
         tvTime.setText(tgl_notif);
@@ -162,18 +177,42 @@ public class MainActivity extends MainControlerActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
                     isChecked2 = false;
+                    notifClose();
                     editor.putBoolean("isChecked", false);
                     editor.apply();
                     LogHelper.print_me("cek = " + pref.getBoolean("isChecked", false));
-                    tbTittle.setText("Manual Mode");
-                    analyticFBLog(Globals.TOGGLE_ID_UNACTIVE,Globals.TOGGLE_TYPE,Globals.TOGGLE_NAME_UNACTIVE);
+                    tbTittle.setText(R.string.manual_mode);
+                    analyticFBLog(Globals.TOGGLE_ID_UNACTIVE, Globals.TOGGLE_TYPE, Globals.TOGGLE_NAME_UNACTIVE);
                 } else {
                     isChecked2 = true;
+
+                    ServiceConnection mConnection = new ServiceConnection() {
+                        public void onServiceConnected(ComponentName className, IBinder binder) {
+                            ((KillNotificationsService.KillBinder) binder).service.startService(new Intent(
+                                    MainActivity.this, MainActivity.class));
+                            LogHelper.print_me("==onServON==");
+
+                            if (Build.VERSION.SDK_INT >= 26) {
+                                Notification.Builder nb = notificationHelper.getAndroidChannelNotification2("ClipCo", getString(R.string.auto_save_mode));
+                                notificationHelper.getManager().notify(0, nb.build());
+                            } else {
+                                NotificationBuilder2(getString(R.string.auto_save_mode));
+                            }
+                        }
+
+                        public void onServiceDisconnected(ComponentName className) {
+                            LogHelper.print_me("==onServDC==");
+                        }
+                    };
+                    bindService(new Intent(MainActivity.this,
+                                    KillNotificationsService.class), mConnection,
+                            Context.BIND_AUTO_CREATE);
+
                     editor.putBoolean("isChecked", true);
                     editor.apply();
                     LogHelper.print_me("cek = " + pref.getBoolean("isChecked", false));
-                    tbTittle.setText("Auto Save Mode");
-                    analyticFBLog(Globals.TOGGLE_ID_ACTIVE,Globals.TOGGLE_TYPE,Globals.TOGGLE_NAME_ACTIVE);
+                    tbTittle.setText(R.string.auto_save_mode);
+                    analyticFBLog(Globals.TOGGLE_ID_ACTIVE, Globals.TOGGLE_TYPE, Globals.TOGGLE_NAME_ACTIVE);
                 }
             }
         });
@@ -204,7 +243,7 @@ public class MainActivity extends MainControlerActivity {
             btnClip.setVisibility(View.GONE);
             btnDelete.setVisibility(View.GONE);
             btnDelete2.setVisibility(View.VISIBLE);
-            analyticFBLog(Globals.ADAPTER_ID,Globals.ADAPTER_TYPE,Globals.ADAPTER_NAME);
+            analyticFBLog(Globals.ADAPTER_ID, Globals.ADAPTER_TYPE, Globals.ADAPTER_NAME);
         }
     }
 
@@ -212,10 +251,10 @@ public class MainActivity extends MainControlerActivity {
         isChecked2 = pref.getBoolean("isChecked", false);
         if (isChecked2) {
             switchAB.setChecked(true);
-            tbTittle.setText("Auto Save Mode");
+            tbTittle.setText(getString(R.string.auto_save_mode));
         } else {
             switchAB.setChecked(false);
-            tbTittle.setText("Manual Mode");
+            tbTittle.setText(getString(R.string.manual_mode));
         }
     }
 
@@ -340,7 +379,7 @@ public class MainActivity extends MainControlerActivity {
                     String msg = etTest.getText().toString();
                     copyToClipBoard(msg);
                     goToActivity(ListClipActivity.class);
-                    analyticFBLog(Globals.BUTTON_ID_COPY,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_COPY);
+                    analyticFBLog(Globals.BUTTON_ID_COPY, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_COPY);
                 }
                 break;
             case 1:
@@ -355,7 +394,7 @@ public class MainActivity extends MainControlerActivity {
                     checkNumberofRowDB();
                     etTest.setText(null);
                     ToastHelper("Clipboard Saved");
-                    analyticFBLog(Globals.BUTTON_ID_SAVE,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_SAVE);
+                    analyticFBLog(Globals.BUTTON_ID_SAVE, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_SAVE);
                 }
                 break;
             case 2:
@@ -363,19 +402,19 @@ public class MainActivity extends MainControlerActivity {
                     ToastHelper("Empty Text");
                 } else {
                     showDialogDeleteRow(this, id);
-                    analyticFBLog(Globals.BUTTON_ID_DELETE,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_DELETE);
+                    analyticFBLog(Globals.BUTTON_ID_DELETE, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_DELETE);
                 }
                 break;
             case 3:
                 goToActivity(ListClipActivity.class);
-                analyticFBLog(Globals.BUTTON_ID_MYCOLLECT,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_MYCOLLECT);
+                analyticFBLog(Globals.BUTTON_ID_MYCOLLECT, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_MYCOLLECT);
                 break;
             case 4:
                 if (etTest.getText().toString().isEmpty()) {
                     ToastHelper("empty text");
                 } else {
                     shareIntentString(etTest.getText().toString());
-                    analyticFBLog(Globals.BUTTON_ID_SHARE,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_SHARE);
+                    analyticFBLog(Globals.BUTTON_ID_SHARE, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_SHARE);
                 }
                 break;
             case 5:
@@ -384,7 +423,7 @@ public class MainActivity extends MainControlerActivity {
                 } else {
                     updateRow(id, etTest.getText().toString());
                     goToActivity(ListClipActivity.class);
-                    analyticFBLog(Globals.BUTTON_ID_UPDATE,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_UPDATE);
+                    analyticFBLog(Globals.BUTTON_ID_UPDATE, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_UPDATE);
                 }
                 break;
             case 6:
@@ -392,12 +431,12 @@ public class MainActivity extends MainControlerActivity {
                     ToastHelper("Empty text");
                 } else {
                     showDialogQRCode(this, etTest.getText().toString());
-                    analyticFBLog(Globals.BUTTON_ID_CONVERT,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_CONVERT);
+                    analyticFBLog(Globals.BUTTON_ID_CONVERT, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_CONVERT);
                 }
                 break;
             case 7:
                 goToActivity(QrReaderActivity.class);
-                analyticFBLog(Globals.BUTTON_ID_SCAN,Globals.BUTTON_TYPE,Globals.BUTTON_NAME_SCAN);
+                analyticFBLog(Globals.BUTTON_ID_SCAN, Globals.BUTTON_TYPE, Globals.BUTTON_NAME_SCAN);
                 break;
         }
     }
@@ -501,6 +540,12 @@ public class MainActivity extends MainControlerActivity {
                 }
             }
         }, intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        notifClose();
+        super.onDestroy();
     }
 
     @Override

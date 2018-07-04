@@ -1,6 +1,7 @@
 package com.sunny.putra.clipco.controler;
 
 import android.app.Dialog;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -9,15 +10,19 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,8 +34,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.sunny.putra.clipco.BuildConfig;
 import com.sunny.putra.clipco.ListClipActivity;
 import com.sunny.putra.clipco.MainActivity;
+import com.sunny.putra.clipco.Notification.NotificationHelper;
 import com.sunny.putra.clipco.R;
 import com.sunny.putra.clipco.util.DbHelper;
 import com.sunny.putra.clipco.util.Globals;
@@ -42,6 +49,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -80,15 +88,43 @@ public class MainControlerActivity extends AppCompatActivity {
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.ic_convert_qr);
+        Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clipco);
         notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_clipco)
+                .setSmallIcon(R.drawable.ic_download)
                 .setLargeIcon(logo)
                 .setContentTitle("ClipCo")
                 .setContentText("Downloading File")
                 .setContentIntent(pIntent)
                 .setAutoCancel(true);
         notificationManager.notify(0, notificationBuilder.build());
+
+    }
+
+    public void NotificationBuilder2(String s) {
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clipco);
+        notificationBuilder = new NotificationCompat.Builder(this)
+                .setLargeIcon(logo)
+                .setOngoing(true)
+                .setContentTitle("ClipCo")
+                .setContentText(s)
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true);
+        notificationManager.notify(0, notificationBuilder.build());
+    }
+
+
+    public void notifClose() {
+        LogHelper.print_me("===NotifClose===");
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert notificationManager != null;
+        notificationManager.cancel(0);
     }
 
     public void ToastHelper(String msg) {
@@ -167,7 +203,7 @@ public class MainControlerActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.custom_dialog_qr);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         ImageView ivQR = dialog.findViewById(R.id.ivQRCode);
         Button btnSave = dialog.findViewById(R.id.btn_save_qr);
@@ -185,7 +221,11 @@ public class MainControlerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                SaveImageQrCode(bmp);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    saveImge3(bmp);
+                } else {
+                    SaveImageQrCode(bmp);
+                }
                 analyticFBLog(Globals.BUTTON_ID_D_SAVEQR, Globals.DIALOG_BUTTON_TYPE, Globals.BUTTON_NAME_D_SAVEQR);
             }
         });
@@ -206,7 +246,54 @@ public class MainControlerActivity extends AppCompatActivity {
      * tools
      **/
 
+    public void saveImge3(Bitmap bmp) {
+        LogHelper.print_me("==SDK>26==");
+        LogHelper.print_me("==svimg3==");
+
+        String n = String.valueOf(System.currentTimeMillis());
+        fname = "Image-" + n + ".jpg";
+        String contentName = "Downloading QR CODE";
+        String root = Environment.getExternalStorageDirectory().toString();
+
+        File docFile = new File(root + "/saved_QRcode");
+        docFile.mkdirs();
+        File file = new File(docFile, fname);
+        if (file.exists())
+            file.delete();
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                NotificationHelper notificationHelper = new NotificationHelper(this);
+                Notification.Builder nb = notificationHelper.getAndroidChannelNotification(getString(R.string.clipco), contentName, fname);
+                notificationHelper.getManager().notify(1, nb.build());
+
+                FileOutputStream out = new FileOutputStream(file);
+                bmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                out.close();
+
+                nb.setProgress(100, 0, false);
+                nb = notificationHelper.getAndroidChannelNotification(getString(R.string.clipco), "QR CODE Downloaded", fname);
+                notificationHelper.getManager().notify(1, nb.build());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Uri pdfURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.replace(".dev","") + ".provider", docFile);
+        Intent target = new Intent(Intent.ACTION_VIEW);
+        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        target.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        target.setDataAndType(pdfURI, "image/*");
+        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        List<ResolveInfo> infos = this.getPackageManager().queryIntentActivities(target, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : infos) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            this.grantUriPermission(packageName, pdfURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+    }
+
     private void SaveImageQrCode(Bitmap bmp) {
+        LogHelper.print_me("==SDK<26==");
         LogHelper.print_me("===saveimg===");
 
         String root = Environment.getExternalStorageDirectory().toString();
@@ -233,6 +320,8 @@ public class MainControlerActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     public String pasteHtmltoText() {
@@ -249,7 +338,7 @@ public class MainControlerActivity extends AppCompatActivity {
         return null;
     }
 
-    public String  readFromTextPlain() {
+    public String readFromTextPlain() {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboard.hasPrimaryClip()) {
             android.content.ClipDescription description = clipboard.getPrimaryClipDescription();
@@ -293,7 +382,7 @@ public class MainControlerActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sendIntent, "share via"));
     }
 
-    public void shareIntentString2 ( String s){
+    public void shareIntentString2(String s) {
         LogHelper.print_me("=====Share2=======");
         ClipboardManager cm = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(s, s);
@@ -304,8 +393,7 @@ public class MainControlerActivity extends AppCompatActivity {
         Locale locale = new Locale("en", "US");
         SimpleDateFormat df = new SimpleDateFormat("EEEE, dd MMMM yyyy", locale);
         Date dt = new Date();
-        String setdate = df.format(dt);
-        return setdate;
+        return df.format(dt);
     }
 
     public void copyToClipBoard(String msg) {

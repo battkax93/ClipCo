@@ -29,6 +29,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
+        LogHelper.print_me("==CreatingDB==");
         db.execSQL(
                 "create table " + TABLE_NAME +
                         "(" + KOLOM_ID + " integer primary key,"
@@ -67,8 +68,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public Cursor getAllData() { //WITH DISTINCT
         SQLiteDatabase db = this.getReadableDatabase();
 //        Cursor res = db.rawQuery("select * from " + TABLE_NAME , null);
-        Cursor res = db.query(true, TABLE_NAME, new String[]{KOLOM_ID, KOLOM_TEXT, KOLOM_TIMESTAMP}, null, null, KOLOM_TEXT, null, null, null);
-        return res;
+        return db.query(true, TABLE_NAME, new String[]{KOLOM_ID, KOLOM_TEXT, KOLOM_TIMESTAMP}, null, null, KOLOM_TEXT, null, null, null);
     }
 
     public void delDuplicateRow(){
@@ -105,11 +105,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public int numberOfRows() {
         SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);
-        return numRows;
+        return (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);
     }
 
-    public int updateRow(String id, String clip) {
+    public void updateRow(String id, String clip) {
         LogHelper.print_me("get keys on dbh = " + id + " | " + clip);
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -117,7 +116,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(KOLOM_TEXT, clip);
 
         // updating row
-        return db.update(TABLE_NAME, values, KOLOM_ID + " = ?",
+        db.update(TABLE_NAME, values, KOLOM_ID + " = ?",
                 new String[]{id});
     }
 
