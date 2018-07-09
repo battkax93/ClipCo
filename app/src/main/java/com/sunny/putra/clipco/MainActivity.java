@@ -64,7 +64,7 @@ public class MainActivity extends MainControlerActivity {
 
     private NotificationHelper notificationHelper;
 
-    private int maxCount = 4;
+    private int maxCount = 5;
     private String KEY_COUNT = "aCount";
     private InterstitialAd mInterstitialAd;                              //adMob
     AdView mAdview;                                                      //adMob
@@ -80,22 +80,8 @@ public class MainActivity extends MainControlerActivity {
 
         getSupportActionBar().setTitle("ClipCo");
 
-        toolbar = findViewById(R.id.tool_bar);
-        btnCopy = findViewById(R.id.btnCopy);
-        btnSave = findViewById(R.id.btnSave);
-        btnDelete = findViewById(R.id.btnDelete);
-        btnDelete2 = findViewById(R.id.btnDel2);
-        btnClip = findViewById(R.id.btnListClip);
-        btnShare = findViewById(R.id.btnShare);
-        btnUpdate = findViewById(R.id.btnUpdate);
-        btnConvert = findViewById(R.id.btnConvertToQR);
-        btnConvert2 = findViewById(R.id.btnConvertToQR2);
-        btnScan = findViewById(R.id.btnScanToQR);
-        etTest = findViewById(R.id.etTest);
-        tvTime = findViewById(R.id.tvTime);
-        tbTittle = findViewById(R.id.toolbar_title);
-        switchAB = findViewById(R.id.switch_save);
-        mAdview = findViewById(R.id.adView_main);                               //adMob
+        init();
+                              //adMob
 
         MobileAds.initialize(this, Globals.ADD_MOB_APP_ID);             //adMob
         mInterstitialAd = new InterstitialAd(this);                     //adMob
@@ -178,9 +164,9 @@ public class MainActivity extends MainControlerActivity {
                 if (!isChecked) {
                     isChecked2 = false;
                     notifClose();
-                    editor.putBoolean("isChecked", false);
+                    editor.putBoolean(KeyToggle, false);
                     editor.apply();
-                    LogHelper.print_me("cek = " + pref.getBoolean("isChecked", false));
+                    LogHelper.print_me("cek = " + pref.getBoolean(KeyToggle, false));
                     tbTittle.setText(R.string.manual_mode);
                     analyticFBLog(Globals.TOGGLE_ID_UNACTIVE, Globals.TOGGLE_TYPE, Globals.TOGGLE_NAME_UNACTIVE);
                 } else {
@@ -208,9 +194,9 @@ public class MainActivity extends MainControlerActivity {
                                     KillNotificationsService.class), mConnection,
                             Context.BIND_AUTO_CREATE);
 
-                    editor.putBoolean("isChecked", true);
+                    editor.putBoolean(KeyToggle, true);
                     editor.apply();
-                    LogHelper.print_me("cek = " + pref.getBoolean("isChecked", false));
+                    LogHelper.print_me("cek = " + pref.getBoolean(KeyToggle, false));
                     tbTittle.setText(R.string.auto_save_mode);
                     analyticFBLog(Globals.TOGGLE_ID_ACTIVE, Globals.TOGGLE_TYPE, Globals.TOGGLE_NAME_ACTIVE);
                 }
@@ -223,6 +209,25 @@ public class MainActivity extends MainControlerActivity {
         prepareMenu();
         clipboardListener();
 
+    }
+
+    public void init(){
+        toolbar = findViewById(R.id.tool_bar);
+        btnCopy = findViewById(R.id.btnCopy);
+        btnSave = findViewById(R.id.btnSave);
+        btnDelete = findViewById(R.id.btnDelete);
+        btnDelete2 = findViewById(R.id.btnDel2);
+        btnClip = findViewById(R.id.btnListClip);
+        btnShare = findViewById(R.id.btnShare);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        btnConvert = findViewById(R.id.btnConvertToQR);
+        btnConvert2 = findViewById(R.id.btnConvertToQR2);
+        btnScan = findViewById(R.id.btnScanToQR);
+        etTest = findViewById(R.id.etTest);
+        tvTime = findViewById(R.id.tvTime);
+        tbTittle = findViewById(R.id.toolbar_title);
+        switchAB = findViewById(R.id.switch_save);
+        mAdview = findViewById(R.id.adView_main);
     }
 
     public void getIntentData() {
@@ -263,14 +268,15 @@ public class MainActivity extends MainControlerActivity {
         LogHelper.print_me("== count " + aCount);
         aCount++;
         int bCount = aCount;
+        insertToSP(KEY_COUNT, bCount);
+        LogHelper.print_me("== count " + getFromSP(KEY_COUNT));
 
         if (bCount >= maxCount) {
             LogHelper.print_me("==showingAds==");
             mInterstitialAd.show();
+            removeKeySP(KEY_COUNT);
+            LogHelper.print_me("== count " + getFromSP(KEY_COUNT));
         }
-
-        insertToSP(KEY_COUNT, bCount);
-        LogHelper.print_me("== count " + getFromSP(KEY_COUNT));
     }
 
     public void insertToSP(String key, int count) {
@@ -492,7 +498,7 @@ public class MainActivity extends MainControlerActivity {
                             editor2.remove("share");
                             editor2.apply();
                         } else {
-                            ToastHelper("copied to clipboard");
+                            ToastHelper("copied to ClipCo");
                             autoSave();
                         }
                     } else if (data != null && description != null && description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
@@ -552,9 +558,6 @@ public class MainActivity extends MainControlerActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             LogHelper.print_me("===onKeyDevicePressed===");
-            if (getFromSP(KEY_COUNT) >= maxCount) {
-                removeKeySP(KEY_COUNT);
-            }
             finish();
             return true;
         }

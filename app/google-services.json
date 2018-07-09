@@ -1,39 +1,39 @@
 {
   "project_info": {
-    "project_number": "341310773391",
-    "firebase_url": "https://clico-500a8.firebaseio.com",
-    "project_id": "clico-500a8",
-    "storage_bucket": "clico-500a8.appspot.com"
+    "project_number": "90509381086",
+    "firebase_url": "https://clico-realese.firebaseio.com",
+    "project_id": "clico-realese",
+    "storage_bucket": "clico-realese.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:341310773391:android:93d886c8985029f3",
+        "mobilesdk_app_id": "1:90509381086:android:9d2bd9d3c16534bb",
         "android_client_info": {
-          "package_name": "com.sunny.putra.clipco.dev"
+          "package_name": "com.sunny.putra.clipco"
         }
       },
       "oauth_client": [
         {
-          "client_id": "341310773391-b6ts3cg2h3tl43lk46nhdf1tfhabmbps.apps.googleusercontent.com",
+          "client_id": "90509381086-7nhq811gvucao86maa14qgu8fllul5ai.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.sunny.putra.clipco.dev",
+            "package_name": "com.sunny.putra.clipco",
             "certificate_hash": "0e9fcfcd9c6c9c410b896e4beccb25bce633012c"
           }
         },
         {
-          "client_id": "341310773391-rp0vh3290v72m9urolp7e793ne09esb8.apps.googleusercontent.com",
-          "cliengt_type": 3
+          "client_id": "90509381086-701q19s312caa3lmb0s0f17802gbkubb.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
-          "client_id": "341310773391-rp0vh3290v72m9urolp7e793ne09esb8.apps.googleusercontent.com",
+          "client_id": "90509381086-701q19s312caa3lmb0s0f17802gbkubb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDK9tWvmxX-zy55GZIt9xYpHUn2aD19N2g"
+          "current_key": "AIzaSyCc86v-hd4r0TUDwrM59uz9MNiV0KobVEM"
         }
       ],
       "services": {
@@ -44,7 +44,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "341310773391-rp0vh3290v72m9urolp7e793ne09esb8.apps.googleusercontent.com",
+              "client_id": "90509381086-701q19s312caa3lmb0s0f17802gbkubb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

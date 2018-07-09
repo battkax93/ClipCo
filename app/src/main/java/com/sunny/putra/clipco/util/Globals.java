@@ -1,8 +1,5 @@
 package com.sunny.putra.clipco.util;
 
-/**
- * Created by Wayan-MECS on 5/15/2018.
- */
 
 public class Globals {
 
@@ -10,12 +7,13 @@ public class Globals {
     public static final boolean showLog = true;
     public static final boolean admob = true;
 
+    public static final String ADD_MOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
+
     //PROD
     /*public static final boolean showLog = false;
-    public static final boolean admob = false;*/
+    public static final boolean admob = false;
 
-    //AdMobs
-    public static final String ADD_MOB_APP_ID = "ca-app-pub-4478275365273097~5896742058";
+    public static final String ADD_MOB_APP_ID = "ca-app-pub-4478275365273097~5896742058";*/
 
     //Analytic
     public static final String BUTTON_TYPE = "button";

@@ -96,7 +96,7 @@ public class MainControlerActivity extends AppCompatActivity {
                 .setContentText("Downloading File")
                 .setContentIntent(pIntent)
                 .setAutoCancel(true);
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(1, notificationBuilder.build());
 
     }
 
@@ -110,6 +110,7 @@ public class MainControlerActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clipco);
         notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_active)
                 .setLargeIcon(logo)
                 .setOngoing(true)
                 .setContentTitle("ClipCo")
@@ -118,7 +119,6 @@ public class MainControlerActivity extends AppCompatActivity {
                 .setAutoCancel(true);
         notificationManager.notify(0, notificationBuilder.build());
     }
-
 
     public void notifClose() {
         LogHelper.print_me("===NotifClose===");
@@ -315,7 +315,7 @@ public class MainControlerActivity extends AppCompatActivity {
 
             notificationBuilder.setProgress(0, 0, false);
             notificationBuilder.setContentText("QR CODE Downloaded");
-            notificationManager.notify(0, notificationBuilder.build());
+            notificationManager.notify( 1, notificationBuilder.build());
 
         } catch (Exception e) {
             e.printStackTrace();
