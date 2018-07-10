@@ -498,7 +498,6 @@ public class MainActivity extends MainControlerActivity {
                             editor2.remove("share");
                             editor2.apply();
                         } else {
-                            ToastHelper("copied to ClipCo");
                             autoSave();
                         }
                     } else if (data != null && description != null && description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
@@ -511,7 +510,6 @@ public class MainActivity extends MainControlerActivity {
                             editor2.remove("share");
                             editor2.apply();
                         } else {
-                            ToastHelper("copied to clipboard");
                             autoSave();
                         }
                     }
@@ -525,6 +523,7 @@ public class MainActivity extends MainControlerActivity {
             LogHelper.print_me("cek = " + isChecked2);
             LogHelper.print_me("==autosave==");
             insertValuetoSqlite(tgl_notif, test);
+            ToastHelper("Copied to ClipCo");
         }
     }
 

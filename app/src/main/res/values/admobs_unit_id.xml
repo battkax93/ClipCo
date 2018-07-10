@@ -2,11 +2,11 @@
 <resources>
 
     <!--test-->
-    <string name="interstitial_video">ca-app-pub-3940256099942544/8691691433</string>
-    <string name="UNIT_ID_lIST_FOOTER">ca-app-pub-3940256099942544/6300978111</string>
+    <!--<string name="interstitial_video">ca-app-pub-3940256099942544/8691691433</string>
+    <string name="UNIT_ID_lIST_FOOTER">ca-app-pub-3940256099942544/6300978111</string>-->
 
     <!--prod-->
-   <!-- <string name="UNIT_ID_lIST_FOOTER">ca-app-pub-4478275365273097/1640311583</string>
-    <string name="interstitial_video">ca-app-pub-4478275365273097/2031989989</string>-->
+    <string name="UNIT_ID_lIST_FOOTER">ca-app-pub-4478275365273097/1640311583</string>
+    <string name="interstitial_video">ca-app-pub-4478275365273097/2031989989</string>
 
 </resources>
